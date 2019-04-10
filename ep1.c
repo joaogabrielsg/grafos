@@ -36,35 +36,21 @@
 	Algoritmo de Dijkstra para calcular um caminho de custo mínimo de s a t, posteriormente vai exibi-lo. */
 
 
-//função criada para mostrar o caminho minino achado pelo algoritmo de Dijsktra
-void ImprimeCaminho(int origem,int destino,int *ant,int i,double *dist){
-    printf("\nCaminho minimo do vértice %d para o vértice %d \n",origem,destino);
-    i = destino;
-    printf("%d" ,i);
-    i = ant[i-1];
-
-    while(i !=-1){
-        printf("<- %d",i+1);
-        i =  ant[i];
-    }
-    printf("\nCusto = %d\n",(int)dist[destino-1]);
-}
-
 void dijkstra(int vertices, int origem, int destino, int *custos){
-	int i = 0; 		   //contador
-	int v = 0;         //variável auxiliar vértice v
-	int ant[MAXV];     //vetor dos Anteriores
+	int i = 0;
+	int auxv = 0;         //variável auxiliar vértice v
+	int anterior[MAXV];     //vetor dos Anteriores
 	int z[MAXV];       //vértices para os quais se conhece o caminho mínimo
 	double min;        //variável auxiliar
 	double dist[MAXV]; //vetor com os custos dos caminhos
 
 	while(i<vertices){
         if(custos[i] != -1){
-            ant[i] = origem -1;
+            anterior[i] = origem -1;
             dist[i] = custos[i];
         }
         else{
-            ant[i] = -1;
+            anterior[i] = -1;
             dist[i] = INFINITO;
         }
         z[i] = 0;
@@ -74,26 +60,26 @@ void dijkstra(int vertices, int origem, int destino, int *custos){
 	dist[origem-1] = 0;
 
 	//Insere o novo vértice que se conhece o caminho mínimo no conjunto z
-	while(v != destino-1 && min != INFINITO){
+	while(auxv != destino-1 && min != INFINITO){
 		min = INFINITO;
 
 		for(i = 0; i < vertices; i++){
 			if(z[i] == 0){
 				if(dist[i] >= 0 && dist[i] < min){
 					min = dist[i];
-					v = i;
+					auxv = i;
 				}
 			}
 		}
 
 		//Distâncias dos novos vizinhos de z
-		if(min != INFINITO && v != destino-1){
-			z[v] = 1;
+		if(min != INFINITO && auxv != destino-1){
+			z[auxv] = 1;
 			for(i = 0; i < vertices; i++)
 				if(z[i] == 0){
-					if(custos[v*vertices+i] != -1 && dist[v]+custos[v*vertices+i] < dist[i]){
-						dist[i] = dist[v]+custos[v*vertices+i];
-						ant[i] = v;
+					if(custos[auxv*vertices+i] != -1 && dist[auxv]+custos[auxv*vertices+i] < dist[i]){
+						dist[i] = dist[auxv]+custos[auxv*vertices+i];
+						anterior[i] = auxv;
 					}
 				}
 		}
@@ -103,9 +89,25 @@ void dijkstra(int vertices, int origem, int destino, int *custos){
 	if(min == INFINITO)
 		printf("\nNão existe caminho entre os vértices %d e %d.\n", origem, destino);
 	else{
-		ImprimeCaminho(origem,destino,ant,i,dist);
+		ImprimeCaminho(origem,destino,anterior,i,dist);
 	}
 }//dijkstra
+
+
+
+//função criada para mostrar o caminho minino achado pelo algoritmo de Dijsktra
+void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *dist){
+    printf("\nCaminho minimo do vértice %d para o vértice %d \n",origem,destino);
+    i = destino;
+    printf("%d" ,i);
+    i = anterior[i-1];
+
+    while(i !=-1){
+        printf("<- %d",i+1);
+        i =  anterior[i];
+    }
+    printf("\nCusto = %d\n",(int)dist[destino-1]);
+}
 
 
 int main(){
@@ -118,16 +120,16 @@ int main(){
 	int origemU  = 0;    	//vértice origem de cada arco do grafo
 	int destinoV = 0;   	//vértice destino de cada arco do grafo
 	int *custos  = NULL; 	//lista de adjacências
-	int i = 0;				//variável auxiliar
-	int j = 0;				//variável auxiliar
+	int i = 0;
+	int j = 0;
 
 	FILE *arquivo = NULL;
 	char *NomeArq;
 	NomeArq = malloc(sizeof(char) *35);
-    setlocale(LC_ALL,"Portuguese");
+    setlocale(LC_ALL,"portuguese");
 
 	while(arquivo == NULL){
-		printf("Digite o nome do arquivo sem a extenção");
+		printf("Digite o nome do arquivo sem a extensão");
 		gets(NomeArq);
 		strcat(NomeArq,".txt\0");
 		arquivo = fopen(NomeArq,"r");
