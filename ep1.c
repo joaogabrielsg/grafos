@@ -1,15 +1,39 @@
-/*     1º Exercício Programa da disciplina de Grafos     */ 
-/*												         */ 
-/* Implementação do Algoritmo de Dijkstra                */
-/* Implementado pelos alunos:			                 */
-/* Ana Carolina, Luisa Macedo e Vitor Guimarães          */
-/* Data: 05/10/2017									     */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define MAXV 150
 #define INFINITO 10000
+
+/* Exercício Programa da Disciplina de Grafos
+   Curso Engenharia da Computação   */
+
+
+
+/* Autores
+    Daniel Silva
+    Italo Bruno
+    João Gabriel
+    José Yuri
+    Robson
+*/
+
+
+/*  O programa desenvolvido abaixo visa implementar na linguagem C o Algoritmo de Dijkstra 
+	para calcular e exibir um caminho de custo mínimo. */
+
+/* O programa funciona da seguinte maneira: Ao escrever pela linha de comando o nome de um
+	arquivo (contendo a descrição de um digrafo), O arquivo fornecido ao programa deverá ter o seguinte layout:
+	
+	n m s t
+	u1 v1 c1
+	u2 v2 c2
+	...
+	um vm cm
+
+	onde n é a quantidade de vértices, m a quantidade de arcos, s é o vértice origem, t é o vértice destino, 
+	ui e vi são a origem e o destino do arco i e ci é o custo da aresta i, então o programa vai utilizar o 
+	Algoritmo de Dijkstra para calcular um caminho de custo mínimo de s a t, posteriormente vai exibi-lo. */
+
 
 void dijkstra(int vertices, int origem, int destino, int *custos){ 
 	int i = 0; 		   //contador
