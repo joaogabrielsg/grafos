@@ -34,29 +34,44 @@
 	ui e vi são a origem e o destino do arco i e ci é o custo da aresta i, então o programa vai utilizar o 
 	Algoritmo de Dijkstra para calcular um caminho de custo mínimo de s a t, posteriormente vai exibi-lo. */
 
+void imprimeCaminho(int origem, int destino, int *listaAnteriores, double *listaDistancia){
+	int i = 0; 
+	printf("\nCaminho mínimo do vértice %d para o vértice %d: \n",
+			origem, destino);
+	
+	i = destino;
+	printf("%d", i);
+	i = listaAnteriores[i-1];
+	
+	while(i !=-1) {
+		printf(" <- %d", i+1);
+		i = listaAnteriores[i];
+	}
+	printf("\nCusto = %d\n", (int)listaDistancia[destino-1]);
+}
 
 void dijkstra(int vertices, int origem, int destino, int *custos){ 
 	int i = 0; 		   //contador
 	int v = 0;         //variável auxiliar vértice v
-	int ant[MAXV];     //vetor dos predecessores 
+	int listaAnteriores[MAXV];     //vetor dos predecessores 
 	int z[MAXV];       //vértices para os quais se conhece o caminho mínimo
 	double min;        //variável auxiliar 
-	double dist[MAXV]; //vetor com os custos dos caminhos 
+	double listaDistancia[MAXV]; //vetor com os custos dos caminhos 
 	
 	//Inicialização
 	for(i = 0; i < vertices; i++){
 		if(custos[i] != -1){
-			ant[i] = origem-1; 
-			dist[i] = custos[i];
+			listaAnteriores[i] = origem-1; 
+			listaDistancia[i] = custos[i];
 		}
 		else{
-			ant[i] = -1;
-			dist[i] = INFINITO;
+			listaAnteriores[i] = -1;
+			listaDistancia[i] = INFINITO;
 		}
 		z[i] = 0;
 	}
 	z[origem-1] = 1;    
-	dist[origem-1] = 0; 
+	listaDistancia[origem-1] = 0; 
 
 	//Insere o novo vértice que se conhece o caminho mínimo no conjunto z  
 	while(v != destino-1 && min != INFINITO){ 
@@ -64,8 +79,8 @@ void dijkstra(int vertices, int origem, int destino, int *custos){
 		
 		for(i = 0; i < vertices; i++){
 			if(z[i] == 0){ 
-				if(dist[i] >= 0 && dist[i] < min){ 
-					min = dist[i]; 
+				if(listaDistancia[i] >= 0 && listaDistancia[i] < min){ 
+					min = listaDistancia[i]; 
 					v = i; 
 				}
 			}
@@ -76,9 +91,9 @@ void dijkstra(int vertices, int origem, int destino, int *custos){
 			z[v] = 1; 
 			for(i = 0; i < vertices; i++)
 				if(z[i] == 0){ 
-					if(custos[v*vertices+i] != -1 && dist[v]+custos[v*vertices+i] < dist[i]){ 
-						dist[i] = dist[v]+custos[v*vertices+i]; 
-						ant[i] = v; 
+					if(custos[v*vertices+i] != -1 && listaDistancia[v]+custos[v*vertices+i] < listaDistancia[i]){ 
+						listaDistancia[i] = listaDistancia[v]+custos[v*vertices+i]; 
+						listaAnteriores[i] = v; 
 					}
 				}
 		}
@@ -87,20 +102,8 @@ void dijkstra(int vertices, int origem, int destino, int *custos){
   //Imprime caminho mínimo de origem a destino
 	if(min == INFINITO)
 		printf("\nNão existe caminho entre os vértices %d e %d.\n", origem, destino);
-	else{
-		printf("\nCaminho mínimo do vértice %d para o vértice %d: \n",
-		   origem, destino);
-   
-		i = destino;
-		printf("%d", i);
-		i = ant[i-1];
-		
-		while(i !=-1) {
-			printf(" <- %d", i+1);
-			i = ant[i];
-		}
-		printf("\nCusto = %d\n", (int)dist[destino-1]);
-	}
+	else
+		imprimeCaminho(origem, destino, listaAnteriores, listaDistancia);
 }//dijkstra
 
 int main(){
