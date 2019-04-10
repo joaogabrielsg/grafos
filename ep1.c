@@ -36,6 +36,25 @@
 	Algoritmo de Dijkstra para calcular um caminho de custo mínimo de s a t, posteriormente vai exibi-lo. */
 
 
+
+//função criada para mostrar o caminho minino achado pelo algoritmo de Dijsktra
+void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *dist){
+    printf("\nCaminho minimo do vértice %d para o vértice %d \n",origem,destino);
+    i = destino;
+    printf("%d" ,i);
+    i = anterior[i-1];
+
+    while(i !=-1){
+        printf("<- %d",i+1);
+        i =  anterior[i];
+    }
+    printf("\nCusto = %d\n",(int)dist[destino-1]);
+}
+
+
+
+
+
 void dijkstra(int vertices, int origem, int destino, int *custos){
 	int i = 0;
 	int auxv = 0;         //variável auxiliar vértice v
@@ -95,19 +114,7 @@ void dijkstra(int vertices, int origem, int destino, int *custos){
 
 
 
-//função criada para mostrar o caminho minino achado pelo algoritmo de Dijsktra
-void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *dist){
-    printf("\nCaminho minimo do vértice %d para o vértice %d \n",origem,destino);
-    i = destino;
-    printf("%d" ,i);
-    i = anterior[i-1];
 
-    while(i !=-1){
-        printf("<- %d",i+1);
-        i =  anterior[i];
-    }
-    printf("\nCusto = %d\n",(int)dist[destino-1]);
-}
 
 
 int main(){
