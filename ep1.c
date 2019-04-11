@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#define MAXV 150
+
+#define NUMERO_MAXIMO_VETORES 150
 #define INFINITO 10000
 
 /* Exercício Programa da Disciplina de Grafos
@@ -38,7 +39,7 @@
 
 
 //função criada para mostrar o caminho minino achado pelo algoritmo de Dijsktra
-void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *dist){
+void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *listaDistancias){
     printf("\nCaminho minimo do vértice %d para o vértice %d \n",origem,destino);
     i = destino;
     printf("%d" ,i);
@@ -48,74 +49,66 @@ void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *dist){
         printf("<- %d",i+1);
         i =  anterior[i];
     }
-    printf("\nCusto = %d\n",(int)dist[destino-1]);
+    printf("\nCusto = %d\n",(int)listaDistancias[destino-1]);
 }
 
-
-
-
-
+//função do Algoritmo de Dijkstra
 void dijkstra(int vertices, int origem, int destino, int *custos){
-	int i = 0;
-	int auxv = 0;         //variável auxiliar vértice v
-	int anterior[MAXV];     //vetor dos Anteriores
-	int z[MAXV];       //vértices para os quais se conhece o caminho mínimo
-	double min;        //variável auxiliar
-	double dist[MAXV]; //vetor com os custos dos caminhos
+	int i = 0;                                       //variável auxiliar de index
+	int verticeAuxiliar = 0;                         //variável auxiliar vértice v
+	int anterior[NUMERO_MAXIMO_VETORES];             //vetor dos Anteriores
+	int z[NUMERO_MAXIMO_VETORES];                    //vértices para os quais se conhece o caminho mínimo
+	double valorMinimo;                              //variável auxiliar
+	double listaDistancias[NUMERO_MAXIMO_VETORES];   //vetor com os custos dos caminhos
 
 	while(i<vertices){
         if(custos[i] != -1){
             anterior[i] = origem -1;
-            dist[i] = custos[i];
+            listaDistancias[i] = custos[i];
         }
         else{
             anterior[i] = -1;
-            dist[i] = INFINITO;
+            listaDistancias[i] = INFINITO;
         }
         z[i] = 0;
         i++;
 	}
 	z[origem-1] = -1;
-	dist[origem-1] = 0;
+	listaDistancias[origem-1] = 0;
 
 	//Insere o novo vértice que se conhece o caminho mínimo no conjunto z
-	while(auxv != destino-1 && min != INFINITO){
-		min = INFINITO;
+	while(verticeAuxiliar != destino-1 && valorMinimo != INFINITO){
+		valorMinimo = INFINITO;
 
 		for(i = 0; i < vertices; i++){
 			if(z[i] == 0){
-				if(dist[i] >= 0 && dist[i] < min){
-					min = dist[i];
-					auxv = i;
+				if(listaDistancias[i] >= 0 && listaDistancias[i] < valorMinimo){
+					valorMinimo = listaDistancias[i];
+					verticeAuxiliar = i;
 				}
 			}
 		}
 
 		//Distâncias dos novos vizinhos de z
-		if(min != INFINITO && auxv != destino-1){
-			z[auxv] = 1;
+		if(valorMinimo != INFINITO && verticeAuxiliar != destino-1){
+			z[verticeAuxiliar] = 1;
 			for(i = 0; i < vertices; i++)
 				if(z[i] == 0){
-					if(custos[auxv*vertices+i] != -1 && dist[auxv]+custos[auxv*vertices+i] < dist[i]){
-						dist[i] = dist[auxv]+custos[auxv*vertices+i];
-						anterior[i] = auxv;
+					if(custos[verticeAuxiliar*vertices+i] != -1 && listaDistancias[verticeAuxiliar]+custos[verticeAuxiliar*vertices+i] < listaDistancias[i]){
+						listaDistancias[i] = listaDistancias[verticeAuxiliar]+custos[verticeAuxiliar*vertices+i];
+						anterior[i] = verticeAuxiliar;
 					}
 				}
 		}
-  }//Fim de while(v != destino-1 && min != INFINITO)
+  }
 
-  //Imprime caminho mínimo de origem a destino
-	if(min == INFINITO)
+  //Verifica se existe cominho minimo, se tiver imprime
+	if(valorMinimo == INFINITO)
 		printf("\nNão existe caminho entre os vértices %d e %d.\n", origem, destino);
 	else{
-		ImprimeCaminho(origem,destino,anterior,i,dist);
+		ImprimeCaminho(origem,destino,anterior,i,listaDistancias);
 	}
-}//dijkstra
-
-
-
-
-
+}
 
 int main(){
     setlocale(LC_ALL,"Portuguese");
