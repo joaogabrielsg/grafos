@@ -37,6 +37,16 @@
 	Algoritmo de Dijkstra para calcular um caminho de custo mínimo de s a t, posteriormente vai exibi-lo. */
 
 
+int vertices = 0;   	//quantidade de vértices do grafo
+int arcos    = 0; 		//quantidade de arcos do grafo
+int origem   = 0;     	//vértice origem dijkstra
+int destino  = 0;    	//vértice destino dijkstra
+int origemU  = 0;    	//vértice origem de cada arco do grafo
+int destinoV = 0;   	//vértice destino de cada arco do grafo
+int *custos  = NULL; 	//lista de adjacências
+int i = 0;
+int j = 0;
+
 
 //função criada para mostrar o caminho minino achado pelo algoritmo de Dijsktra
 void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *listaDistancias){
@@ -53,7 +63,7 @@ void ImprimeCaminho(int origem,int destino,int *anterior,int i,double *listaDist
 }
 
 //função do Algoritmo de Dijkstra
-void dijkstra(int vertices, int origem, int destino, int *custos){
+void dijkstra(){
 	int i = 0;                                       //variável auxiliar de index
 	int verticeAuxiliar = 0;                         //variável auxiliar vértice v
 	int anterior[NUMERO_MAXIMO_VETORES];             //vetor dos Anteriores
@@ -110,26 +120,15 @@ void dijkstra(int vertices, int origem, int destino, int *custos){
 	}
 }
 
-int main(){
-    setlocale(LC_ALL,"Portuguese");
-
-	int vertices = 0;   	//quantidade de vértices do grafo
-	int arcos    = 0; 		//quantidade de arcos do grafo
-	int origem   = 0;     	//vértice origem dijkstra
-	int destino  = 0;    	//vértice destino dijkstra
-	int origemU  = 0;    	//vértice origem de cada arco do grafo
-	int destinoV = 0;   	//vértice destino de cada arco do grafo
-	int *custos  = NULL; 	//lista de adjacências
-	int i = 0;
-	int j = 0;
-
-	FILE *arquivo = NULL;
+//função para leitura do arquivo e reserva de espeaço de memória
+void lerArquivo(){
+    FILE *arquivo = NULL;
 	char *NomeArq;
 	NomeArq = malloc(sizeof(char) *35);
     setlocale(LC_ALL,"portuguese");
 
-	while(arquivo == NULL){
-		printf("Digite o nome do arquivo sem a extensão");
+    while(arquivo == NULL){
+		printf("Digite o nome do arquivo sem a extensão: ");
 		gets(NomeArq);
 		strcat(NomeArq,".txt\0");
 		arquivo = fopen(NomeArq,"r");
@@ -150,8 +149,15 @@ int main(){
 		fscanf(arquivo, "%d", &custos[(origemU-1)*vertices+destinoV-1]);
 	}
 	fclose(arquivo);
+}
 
-	dijkstra(vertices, origem, destino, custos);
+
+
+
+int main(){
+    setlocale(LC_ALL,"Portuguese");
+	lerArquivo();
+	dijkstra();
 
   return 0;
 }
